@@ -1,0 +1,20 @@
+cmake_minimum_required(VERSION 3.16)
+project(deque_int LANGUAGES CXX)
+
+add_library(deque_int INTERFACE)
+target_compile_features(deque_int INTERFACE cxx_std_17)
+target_include_directories(deque_int INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+option(DEQUE_INT_BUILD_TESTS "Build tests" ON)
+
+if(DEQUE_INT_BUILD_TESTS)
+    enable_testing()
+    add_executable(deque_int_tests tests/test.cpp)
+    target_link_libraries(deque_int_tests PRIVATE deque_int)
+    if(MSVC)
+        target_compile_options(deque_int_tests PRIVATE /W4)
+    else()
+        target_compile_options(deque_int_tests PRIVATE -Wall -Wextra -Wpedantic)
+    endif()
+    add_test(NAME deque_int_tests COMMAND deque_int_tests)
+endif()
